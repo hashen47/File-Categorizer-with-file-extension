@@ -100,12 +100,11 @@ class Categorizer:
                 if "sub" not in record:
                     continue
 
-                if len(record["sub"]) > 0:
-                    for sub_sub_folder in record["sub"]:
-                        sub_sub_path = os.path.join(subpath, sub_sub_folder["dir"])
+                for sub_sub_folder in record["sub"]:
+                    sub_sub_path = os.path.join(subpath, sub_sub_folder["dir"])
 
-                        if not os.path.exists(sub_sub_path):
-                            os.mkdir(sub_sub_path)
+                    if not os.path.exists(sub_sub_path):
+                        os.mkdir(sub_sub_path)
 
         except Exception as e:
             print(e)
