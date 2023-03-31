@@ -1,0 +1,72 @@
+[
+    {
+        "dir" : "JAVASCRIPT",
+        "ext" : "js"
+    },
+    {
+        "dir" : "PYTHON",
+        "ext" : "py" 
+    },
+    {
+        "dir" : "HTML",
+        "ext" : "html" 
+    },
+    {
+        "dir" : "SQL",
+        "ext" : "sql" 
+    },
+    {
+        "dir" : "ZIP",
+        "ext" : "zip" 
+    },
+    {
+        "dir" : "EXE",
+        "ext" : "exe" 
+    },
+    {
+        "dir" : "ISO",
+        "ext" : "iso" 
+    },
+    {
+        "dir" : "AUDIOS",
+        "ext" : "",
+        "sub" : [
+            {
+                "dir" : "WAV",
+                "ext" : "wav"
+            },
+            {
+                "dir" : "MP3",
+                "ext" : "mp3"
+            }
+        ]
+    },
+    {
+        "dir" : "VIDEOS",
+        "ext" : "",
+        "sub" : [
+            {
+                "dir" : "MP4",
+                "ext" : "mp4"
+            },
+            {
+                "dir" : "AVI",
+                "ext" : "avi"
+            }
+        ]
+    },
+    {
+        "dir" : "IMAGES",
+        "ext" : "",
+        "sub" : [
+            {
+                "dir" : "JPEG",
+                "ext" : "jpeg"
+            },
+            {
+                "dir" : "JPG",
+                "ext" : "jpg"
+            }
+        ]
+    }
+]
