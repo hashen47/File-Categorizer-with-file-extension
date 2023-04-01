@@ -28,6 +28,10 @@
         "ext" : "iso" 
     },
     {
+        "dir" : "DIRECTORY",
+        "ext" : "directory" 
+    },
+    {
         "dir" : "AUDIOS",
         "ext" : "",
         "sub" : [
