@@ -32,6 +32,10 @@ data = [
         "ext" : "txt" 
     },
     {
+        "dir" : "PDF",
+        "ext" : "pdf" 
+    },
+    {
         "dir" : "MS_WORD_DOCS",
         "ext" : "docx" 
     },
@@ -82,6 +86,10 @@ data = [
             {
                 "dir" : "JPEG",
                 "ext" : "jpeg"
+            },
+            {
+                "dir" : "PNG",
+                "ext" : "png"
             },
             {
                 "dir" : "JPG",
