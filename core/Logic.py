@@ -143,7 +143,7 @@ class Categorizer:
         :return None
         """
         try:
-            with open("dirs_and_exts.json", "r") as f:
+            with open("core/dirs_and_exts.json", "r") as f:
                 self.folder_structure= json.load(f)
         
         except Exception as e:

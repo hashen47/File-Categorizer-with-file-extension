@@ -1,5 +1,5 @@
 import tkinter, os
-from Logic_Thread import Logic_Thread
+from .Logic_Thread import Logic_Thread
 from tkinter import Frame, ttk, W, S, E, messagebox, filedialog
 
 
@@ -162,8 +162,3 @@ class Gui(Frame):
         :return None
         """
         self.master.mainloop()
-
-
-
-gui = Gui()
-gui.run()

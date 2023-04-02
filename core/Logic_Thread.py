@@ -1,5 +1,5 @@
 from threading import Thread
-from Logic import Categorizer
+from .Logic import Categorizer
 
 
 
