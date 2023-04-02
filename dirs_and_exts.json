@@ -44,6 +44,10 @@
         "ext" : "directory" 
     },
     {
+        "dir" : "OTHERS",
+        "ext" : "" 
+    },
+    {
         "dir" : "AUDIOS",
         "ext" : "",
         "sub" : [
