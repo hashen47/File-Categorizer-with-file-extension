@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+import time
 
 
 
@@ -10,7 +11,12 @@ class Categorizer:
     TYPES = ["copy", "move"]
 
 
-    def __init__(self, src, dst, type : int = 0):
+    def __init__(self, src, dst, func, type : int = 0):
+        self.progress = 0 # get the progress value from the gui
+        self.finish_items = 0 # the total count that compleatly move or copy
+        self.total_items = 0 # the total files and dir count that have to move or copy
+        self.update_func = func # the update function of the Gui(Gui class)
+
         self.set_type(type)
         self.set_src(src)
         self.set_target(dst)
@@ -99,11 +105,37 @@ class Categorizer:
                 if os.path.join(root, Categorizer.OUTPUT_FOLDER_NAME) == self.target:
                     self.all[1].remove(Categorizer.OUTPUT_FOLDER_NAME) # delete output folder from the dirs
             
-            print(self.all)
+            # set the total tiles and folder counts that hove to move or copy
+            self.set_total_items()
+            self.update_func(self.progress, self.total_items, self.finish_items)
 
         except Exception as e:
             print(e)
             exit()
+
+    
+    def set_total_items(self):
+        """
+        set total_items that have to copy or move
+        if any file that in source already exists in the dstination's sub directory
+        that file is skip
+        :return None
+        """
+        _, dirs, files = self.all
+
+        for folder in dirs:
+            sub_dir = self.get_sub_directory("directory")
+            if sub_dir:
+                if not os.path.exists(os.path.join(self.target, sub_dir, folder)):
+                    self.total_items += 1
+
+        for file in files:
+            ext = os.path.splitext(file)
+            sub_dir = self.get_sub_directory(ext[1][1:]) or "OTHERS"# get the file extension
+            if sub_dir:
+                if not os.path.exists(os.path.join(self.target, sub_dir, file)):
+                    self.total_items += 1
+
 
 
     def set_target_folder_structure(self):
@@ -149,6 +181,8 @@ class Categorizer:
                     if not os.path.exists(sub_sub_path):
                         os.mkdir(sub_sub_path)
 
+            time.sleep(10)
+
         except Exception as e:
             print(e)
             exit()
@@ -170,6 +204,7 @@ class Categorizer:
                 if "sub" in record: 
                     for sub_record in record["sub"]:
                         if sub_record["ext"] == ext:
+                            print(ext, sub_record["ext"])
                             return sub_record["dir"]
 
             return False
@@ -202,20 +237,22 @@ class Categorizer:
             for folder in dirs:
                 sub_dir = self.get_sub_directory("directory")
                 if sub_dir:
-                    if self.type == "copy":
-                        if not os.path.exists(os.path.join(self.target, sub_dir, folder)):
+                    if not os.path.exists(os.path.join(self.target, sub_dir, folder)):
+                        if self.type == "copy":
                             shutil.copytree(os.path.join(root, folder), os.path.join(self.target, sub_dir, folder))
-                    elif self.type == "move":
-                        if not os.path.exists(os.path.join(self.target, sub_dir)):
+                        elif self.type == "move":
                             shutil.move(os.path.join(root, folder), os.path.join(self.target, sub_dir))
-                    
-                    self.copy_or_move_print(os.path.join(self.src, folder), os.path.join(self.target, sub_dir, folder))
+
+                        self.copy_or_move_print(os.path.join(self.src, folder), os.path.join(self.target, sub_dir, folder))
+                        self.finish_items += 1 
+                        self.progress = 100 * self.finish_items / self.total_items
+                        self.update_func(int(self.progress), self.total_items, self.finish_items)
 
 
             # copy all files to the sub direcotories according to their extension
             for file in files:
                 ext = os.path.splitext(file)
-                sub_dir = self.get_sub_directory(ext[1][1:]) # get the file extension
+                sub_dir = self.get_sub_directory(ext[1][1:]) or "OTHERS" # get the file extension
 
                 if sub_dir:
                     if not os.path.exists(os.path.join(self.target, sub_dir, file)):
@@ -225,6 +262,12 @@ class Categorizer:
                             shutil.move(os.path.join(root, file), os.path.join(self.target, sub_dir))
 
                         self.copy_or_move_print(os.path.join(root, file), os.path.join(self.target, sub_dir, file))
+                        self.finish_items += 1 
+                        self.progress = 100 * self.finish_items / self.total_items
+                        self.update_func(int(self.progress), self.total_items, self.finish_items)
+
+            # set compleated to True
+            self.update_func(int(self.progress), self.total_items, self.finish_items, compleated=True)
         
         except Exception as e:
             print(e)
