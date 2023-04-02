@@ -90,7 +90,7 @@ class Gui(Frame):
             if progress == 100:
                 messagebox.showinfo(title="Success", message="Successfully copy/move the files")
             elif tot == 0:
-                messagebox.showwarning(title="Warning", message="Source is empty")
+                messagebox.showwarning(title="Warning", message="Source is empty or all files are already exist in the destination")
             self.compleated = False 
             self.enable_or_disable_buttons(disable=False)
 
