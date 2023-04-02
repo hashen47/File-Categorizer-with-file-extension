@@ -28,7 +28,19 @@
         "ext" : "iso" 
     },
     {
-        "dir" : "DIRECTORY",
+        "dir" : "TEXT",
+        "ext" : "txt" 
+    },
+    {
+        "dir" : "MS_WORD_DOCS",
+        "ext" : "docx" 
+    },
+    {
+        "dir" : "MS_EXCEL_DOCS",
+        "ext" : "xlsx" 
+    },
+    {
+        "dir" : "DIRECTORIES",
         "ext" : "directory" 
     },
     {
