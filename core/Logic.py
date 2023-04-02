@@ -1,6 +1,7 @@
 import os
 import shutil
 import json
+from .dirs_and_exts import data
 
 
 
@@ -139,12 +140,11 @@ class Categorizer:
 
     def set_target_folder_structure(self):
         """
-        set target_folder_structure according to the dirs_and_exts.json file data
+        set target_folder_structure according to the dirs_and_exts.py file data list
         :return None
         """
         try:
-            with open("core/dirs_and_exts.json", "r") as f:
-                self.folder_structure= json.load(f)
+            self.folder_structure = data
         
         except Exception as e:
             print(e)
