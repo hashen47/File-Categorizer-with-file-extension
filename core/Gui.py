@@ -117,6 +117,8 @@ class Gui(Frame):
         if self.src:
             self.dst_entry_var.set(self.dst)
             messagebox.showinfo("Success", f"You chose {self.dst} as the destination directory")
+        else:
+            messagebox.showwarning("warning", "set the source folder before set the destination folder")
 
 
     def start_btn_func(self):
