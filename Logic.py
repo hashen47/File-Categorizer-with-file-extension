@@ -15,6 +15,7 @@ class Categorizer:
         self.set_src(src)
         self.set_target(dst)
         self.set_target_folder_structure()
+        self.set_all_files_dirs()
         self.create_target_folders()
         self.move_or_copy_files()
 
@@ -41,7 +42,7 @@ class Categorizer:
     def set_src(self, src):
         """
         set src folder 
-        :param src : string
+        :param src : str
         :return None
         """
         try:
@@ -64,7 +65,7 @@ class Categorizer:
     def set_target(self, dst):
         """
         set target folder (dst/OUTPUT_FOLDER_NAME)
-        :param dst : string
+        :param dst : str
         :return None
         """
         try:
@@ -78,6 +79,27 @@ class Categorizer:
                     raise Exception("The given dst path is not pointing to a directory")
             else: 
                 raise Exception("The given dst path to source is invalid")
+
+        except Exception as e:
+            print(e)
+            exit()
+
+
+    def set_all_files_dirs(self):
+        """
+        get the all files and folders of the src path
+        and set it to self.all property
+        :return None
+        """
+        try:
+            self.all = list(os.walk(self.src).__next__())
+            root, dirs, _ = self.all 
+
+            if Categorizer.OUTPUT_FOLDER_NAME in dirs:
+                if os.path.join(root, Categorizer.OUTPUT_FOLDER_NAME) == self.target:
+                    self.all[1].remove(Categorizer.OUTPUT_FOLDER_NAME) # delete output folder from the dirs
+            
+            print(self.all)
 
         except Exception as e:
             print(e)
@@ -137,7 +159,7 @@ class Categorizer:
         """
         get the extenstion of a file and return the sub directory according to the extenstion
         if no folder according to the given extension then return false
-        :param ext : string
+        :param ext : str
         :return str | bool
         """
         try:
@@ -154,7 +176,17 @@ class Categorizer:
 
         except Exception as e:
             print(e)
-            exit();
+            exit()
+
+
+    def copy_or_move_print(self, src:str, dst:str) -> None:
+        """
+        print the file previous path and copy or move path values with some alignments using fstrings
+        :param src: str 
+        :param dst: str
+        :return None
+        """
+        print(f"{src:<70}   =>        {dst}")
 
 
     def move_or_copy_files(self):
@@ -164,33 +196,36 @@ class Categorizer:
         :return None
         """
         try:
-            for root, dirs, files in os.walk(self.src):
+            root, dirs, files = self.all
 
-                # copy all the folders of the src to DIRECTORY sub folder
-                for folder in dirs:
-                    sub_dir = self.get_sub_directory("directory")
-                    if sub_dir:
+            # copy all the folders of the src to DIRECTORY sub folder
+            for folder in dirs:
+                sub_dir = self.get_sub_directory("directory")
+                if sub_dir:
+                    if self.type == "copy":
+                        if not os.path.exists(os.path.join(self.target, sub_dir, folder)):
+                            shutil.copytree(os.path.join(root, folder), os.path.join(self.target, sub_dir, folder))
+                    elif self.type == "move":
+                        if not os.path.exists(os.path.join(self.target, sub_dir)):
+                            shutil.move(os.path.join(root, folder), os.path.join(self.target, sub_dir))
+                    
+                    self.copy_or_move_print(os.path.join(self.src, folder), os.path.join(self.target, sub_dir, folder))
+
+
+            # copy all files to the sub direcotories according to their extension
+            for file in files:
+                ext = os.path.splitext(file)
+                sub_dir = self.get_sub_directory(ext[1][1:]) # get the file extension
+
+                if sub_dir:
+                    if not os.path.exists(os.path.join(self.target, sub_dir, file)):
                         if self.type == "copy":
-                            if os.path.exists(os.path.join(self.target, sub_dir, folder)):
-                                shutil.copytree(os.path.join(root, folder), os.path.join(self.target, sub_dir, folder))
-                        elif self.type == "move":
-                            if os.path.exists(os.path.join(self.target, sub_dir)):
-                                shutil.move(os.path.join(root, folder), os.path.join(self.target, sub_dir))
+                            shutil.copy(os.path.join(root, file), os.path.join(self.target, sub_dir))
+                        else:
+                            shutil.move(os.path.join(root, file), os.path.join(self.target, sub_dir))
 
-                # copy all files to the sub direcotories according to their extension
-                for file in files:
-                    ext = os.path.splitext(file)
-                    sub_dir = self.get_sub_directory(ext[1][1:]) # get the file extension
-
-                    if sub_dir:
-                        if os.path.exists(os.path.join(self.target, sub_dir)):
-                            if self.type == "copy":
-                                shutil.copy(os.path.join(root, file), os.path.join(self.target, sub_dir))
-                            else:
-                                shutil.move(os.path.join(root, file), os.path.join(self.target, sub_dir))
-                break
+                        self.copy_or_move_print(os.path.join(root, file), os.path.join(self.target, sub_dir, file))
         
         except Exception as e:
             print(e)
             exit()
-            
