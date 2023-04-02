@@ -1,7 +1,6 @@
 import os
 import shutil
 import json
-import time
 
 
 
@@ -180,8 +179,6 @@ class Categorizer:
 
                     if not os.path.exists(sub_sub_path):
                         os.mkdir(sub_sub_path)
-
-            time.sleep(10)
 
         except Exception as e:
             print(e)
