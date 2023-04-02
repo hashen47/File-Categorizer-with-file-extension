@@ -1,4 +1,5 @@
 import tkinter, os
+from Logic_Thread import Logic_Thread
 from tkinter import Frame, ttk, W, S, E, messagebox, filedialog
 
 
@@ -12,6 +13,7 @@ class Gui(Frame):
 
         self.src = ""
         self.dst = ""
+        self.compleated = False # indicate that copy/move process is compleated
 
         self.set_styles()
         self.create_widgets()
@@ -35,6 +37,10 @@ class Gui(Frame):
         # text variables
         self.src_entry_var = tkinter.StringVar()
         self.dst_entry_var = tkinter.StringVar()
+        self.compleated_files_count = tkinter.StringVar()
+        self.prog = tkinter.StringVar()
+        self.compleated_files_count.set("compleated : 0/0")
+        self.prog.set("0%")
 
         # widgets
         self.src_label = ttk.Label(master=self.master, text="src", font=("Helvetica", 13))
@@ -61,18 +67,32 @@ class Gui(Frame):
         self.progress_bar = ttk.Progressbar(master=self.master, value=0, length=560)
         self.progress_bar.grid(column=0, row=5, columnspan=3, sticky=W, pady=(5, 6))
 
-        self.compleated = ttk.Label(master=self.master, text=f"compleated : 0/12")
+        self.compleated = ttk.Label(master=self.master, textvariable=self.compleated_files_count)
         self.compleated.grid(column=0, row=6, sticky=W)
 
-        self.current_progress = ttk.Label(master=self.master, text=f"{self.progress_bar['value']}%")
+        self.current_progress = ttk.Label(master=self.master, textvariable=self.prog)
         self.current_progress.grid(column=1, row=6, sticky=E)
 
-        self.cancel_btn = ttk.Button(master=self.master, text="cancel")
+        self.cancel_btn = ttk.Button(master=self.master, text="cancel", command=self.cancel_btn_func)
         self.cancel_btn.grid(column=1, row=7, sticky=E, pady=(20, 0))
 
-        self.start_btn = ttk.Button(master=self.master, text="start")
+        self.start_btn = ttk.Button(master=self.master, text="start", command=self.start_btn_func)
         self.start_btn.grid(column=0, row=7, sticky=E, pady=(20, 0))
 
+
+    def update(self, progress, tot, done_tot, compleated=False):
+        self.compleated = compleated
+        self.prog.set(f"{progress}%")
+        self.progress_bar["value"] = int(progress)
+        self.compleated_files_count.set(f"compleated : {done_tot}/{tot}")
+
+        if self.compleated:
+            if progress == 100:
+                messagebox.showinfo(title="Success", message="Successfully copy/move the files")
+            elif tot == 0:
+                messagebox.showwarning(title="Warning", message="Source is empty")
+            self.compleated = False 
+            self.enable_or_disable_buttons(disable=False)
 
     
     def set_src(self):
@@ -98,7 +118,44 @@ class Gui(Frame):
             self.dst_entry_var.set(self.dst)
             messagebox.showinfo("Success", f"You chose {self.dst} as the destination directory")
 
+
+    def start_btn_func(self):
+        """
+        create the Categorizer instance and call its methods
+        :return None
+        """
+        if self.src and self.dst:
+            self.process = Logic_Thread(self.src, self.dst, self.update)
+            self.process.start()
+            self.enable_or_disable_buttons()
+        else:
+            messagebox.showerror(title="Error", message="You should set both src and dst folders before continue")
+
     
+    def enable_or_disable_buttons(self, disable=True):
+        """
+        enable or disable button (except the cancel button)
+        :param disable : bool
+        :return None
+        """
+        if disable:
+            state = tkinter.DISABLED
+        else:
+            state = tkinter.NORMAL
+
+        self.start_btn.configure(state=state)
+        self.src_btn.configure(state=state)
+        self.dst_btn.configure(state=state)
+
+
+    def cancel_btn_func(self):
+        """
+        call the destroy method
+        :return None
+        """
+        self.master.destroy()
+
+
     def run(self):
         """
         execute the mainloop
