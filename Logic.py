@@ -204,8 +204,7 @@ class Categorizer:
                 if "sub" in record: 
                     for sub_record in record["sub"]:
                         if sub_record["ext"] == ext:
-                            print(ext, sub_record["ext"])
-                            return sub_record["dir"]
+                            return os.path.join(record["dir"], sub_record["dir"])
 
             return False
 
