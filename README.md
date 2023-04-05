@@ -54,7 +54,7 @@ first you should clone the repo. go to the folder that you want to store this re
 
 - This programme not replace any file, only copy if that file is not exists in the sub folders(folders that in the OUTPUT FOLDER).
 
-- If their is no record to some extenstion in data list in core/dirs_and_exts.py all files contain that extensition move to the OUTPUT/OTHERS folder, if you want to add more extenstion to categorize edit the data list in core/dirs_and_exts.py file
+- If their is no record to some extension (in data list in core/dirs_and_exts.py) all files which contain that extension copy to the OUTPUT/OTHERS folder, if you want to add more extension to categorize, edit the data list in core/dirs_and_exts.py file
 
 ## Support
 
