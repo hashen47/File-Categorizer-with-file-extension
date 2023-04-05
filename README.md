@@ -4,15 +4,15 @@ This project purpose is to categorize your file according to file's extension an
 
 ## Dependencies
 
-This programme need python to run, so first you should install python to your local machine. you can download python [here](https://www.python.org/downloads/)
+- This programme need python to run, so first you should install python to your local machine. you can download python [here](https://www.python.org/downloads/)
 
 ## Installation
 
-first you should clone the repo. go to the folder that you want to store this repo. then openup your terminal and paste below command and press Enter key.
+- first you should clone the repo. go to the folder that you want to store this repo. then openup your terminal and paste below command and press Enter key.
 
-```git clone https://github.com/hashen47/File-Categorizer-with-file-extension.git```
+    ```git clone https://github.com/hashen47/File-Categorizer-with-file-extension.git```
 
-![1](images/1.jpg)
+    ![1](images/1.jpg)
 
 ## How to use
 
