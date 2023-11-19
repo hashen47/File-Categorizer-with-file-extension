@@ -16,8 +16,24 @@ data = [
         "ext" : "sql" 
     },
     {
+        "dir" : "YAML",
+        "ext" : "yml" 
+    },
+    {
         "dir" : "ZIP",
         "ext" : "zip" 
+    },
+    {
+        "dir" : "DEB",
+        "ext" : "deb" 
+    },
+    {
+        "dir" : "TAR",
+        "ext" : "tar" 
+    },
+    {
+        "dir" : "GZ",
+        "ext" : "gz" 
     },
     {
         "dir" : "EXE",
